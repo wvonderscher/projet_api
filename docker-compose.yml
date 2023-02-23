@@ -1,7 +1,7 @@
 services:
 
   restservice:
-    image: m2/projet-api:1.0
+    image: m2/offre:1.0
     ports:
       - 8082:8082
     networks:

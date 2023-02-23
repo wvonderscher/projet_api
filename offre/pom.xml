@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.miage</groupId>
-	<artifactId>projet_api</artifactId>
+	<artifactId>offre</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>projet_api</name>
+	<name>offre</name>
 	<description>projet API M2 MIAGE ACSI</description>
 	<properties>
 		<java.version>17</java.version>
