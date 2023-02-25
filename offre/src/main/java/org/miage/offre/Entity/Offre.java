@@ -36,7 +36,8 @@ public class Offre implements Serializable {
     private String lieuStageAdresse; //trier
     // private String lieuStageTel;
     // private String lieuStageURL;
-
+    // private boolean vacante;
+    private List<Candidature> lCandidat;
 
 
 }
