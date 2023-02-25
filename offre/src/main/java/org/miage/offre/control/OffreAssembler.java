@@ -17,10 +17,8 @@ public class OffreAssembler implements RepresentationModelAssembler<Offre, Entit
     @Override
     public EntityModel<Offre> toModel(Offre offre) {
         return EntityModel.of(offre,
-                linkTo(methodOn(OffreRepresentation.class)
-                    .getOffreById(offre.getId())).withSelfRel(),
-                linkTo(methodOn(OffreRepresentation.class)
-                    .getAllOffres()).withRel("collection"));
+                linkTo(methodOn(OffreRepresentation.class).getOffreById(offre.getId())).withSelfRel(),
+                linkTo(methodOn(OffreRepresentation.class).getAllOffres()).withRel("collection"));
     }
 
     @Override
@@ -29,7 +27,6 @@ public class OffreAssembler implements RepresentationModelAssembler<Offre, Entit
             .stream(entities.spliterator(), false)
             .map(this::toModel)
             .toList();
-
         return CollectionModel.of(intervenanModel, linkTo(methodOn(OffreRepresentation.class)
             .getAllOffres()).withSelfRel());
     }

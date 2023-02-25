@@ -49,7 +49,7 @@ public class PersonneRepresentation {
     }
 
         // GET one by name
-        @GetMapping(value = "/user/{personneName}") // obligé d'ajouter /user/ sinon une erreur niveau schéma d'URL
+        @GetMapping(value = "/nom/{personneName}") // obligé d'ajouter /user/ sinon une erreur niveau schéma d'URL
         public ResponseEntity<?> getPersonneByName(@PathVariable("personneName") String name) {
             // return Optional.of(ir.findyByNomUser(name))
             //         .filter(Optional::isPresent)

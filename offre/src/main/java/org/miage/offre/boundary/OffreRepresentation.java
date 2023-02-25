@@ -48,6 +48,31 @@ public class OffreRepresentation {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // GET all by Domaine
+    @GetMapping(value = "/domaine/{offreDomaine}")
+    public ResponseEntity<?> getOffreByDomaine(@PathVariable("offreDomaine") String domaine) {
+        return ResponseEntity.ok(ia.toCollectionModel(ir.findByDomaine(domaine)));
+    }   
+    
+    // GET all by organisation
+    @GetMapping(value = "/organisation/{offreOrganisation}")
+    public ResponseEntity<?> getOffreByOrganisation(@PathVariable("offreOrganisation") String organisation) {
+        return ResponseEntity.ok(ia.toCollectionModel(ir.findByNomOrganisation(organisation)));
+    }
+    
+    // GET all by DateDebutStage
+    @GetMapping(value = "/dateDebut/{offreDateDebutStage}")
+    public ResponseEntity<?> getOffreByDateDebut(@PathVariable("offreDateDebutStage") String dateDebutStage) {
+        return ResponseEntity.ok(ia.toCollectionModel(ir.findByDateDebutStage(dateDebutStage)));
+    }
+
+     // GET all organisation
+    @GetMapping(value = "/lieu/{offreLieuStageAdresse}")
+    public ResponseEntity<?> getOffreByLieuStageAdresse(@PathVariable("offreLieuStageAdresse") String lieuStageAdresse) {
+         return ResponseEntity.ok(ia.toCollectionModel(ir.findByLieuStageAdresse(lieuStageAdresse)));
+     }
+    
+
     // POST
     @PostMapping
     @Transactional
@@ -56,7 +81,9 @@ public class OffreRepresentation {
                 offre.getNomStage(),
                 offre.getDomaine(),
                 offre.getNomOrganisation(),
-                offre.getDescriptionStage());
+                offre.getDescriptionStage(),
+                offre.getDateDebutStage(),
+                offre.getLieuStageAdresse());
         Offre saved = ir.save(toSave);
         URI location = linkTo(OffreRepresentation.class).slash(saved.getId()).toUri();
         return ResponseEntity.created(location).build();
@@ -83,7 +110,9 @@ public class OffreRepresentation {
                 newOffre.getNomStage(),
                 newOffre.getDomaine(),
                 newOffre.getNomOrganisation(),
-                newOffre.getDescriptionStage());
+                newOffre.getDescriptionStage(),
+                newOffre.getDateDebutStage(),
+                newOffre.getLieuStageAdresse());
         toSave.setId(id);
         ir.save(toSave);
         return ResponseEntity.ok().build();

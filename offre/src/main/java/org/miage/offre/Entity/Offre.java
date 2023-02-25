@@ -19,13 +19,13 @@ public class Offre implements Serializable {
     @Id
     private String id;
     private String nomStage;
-    private String domaine;
-    private String nomOrganisation;
+    private String domaine; // trier
+    private String nomOrganisation; //trier
     private String descriptionStage;
     // private String datePublicationOffre;
     // private String niveauEtudeStage;
     // private String experienceRequiseStage;
-    // private String dateDebutStage;
+    private String dateDebutStage; //trier
     // private String dureeStage;
     // private String salaireStage;
     // private String indemnisation;
@@ -33,7 +33,7 @@ public class Offre implements Serializable {
     // private String organisationMail;
     // private String organisationTel;
     // private String organisationURL;
-    // private String lieuStageAdresse;
+    private String lieuStageAdresse; //trier
     // private String lieuStageTel;
     // private String lieuStageURL;
 
