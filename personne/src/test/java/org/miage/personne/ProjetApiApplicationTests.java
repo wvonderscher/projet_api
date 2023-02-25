@@ -1,4 +1,4 @@
-package org.miage.projet_api;
+package org.miage.personne;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
