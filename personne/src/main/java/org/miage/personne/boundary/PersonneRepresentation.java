@@ -39,17 +39,17 @@ public class PersonneRepresentation {
         return ResponseEntity.ok(ia.toCollectionModel(ir.findAll()));
     }
 
-    // GET one
-    @GetMapping(value = "/{personneId}")
-    public ResponseEntity<?> getPersonneById(@PathVariable("personneId") String id) {
-        return Optional.of(ir.findById(id))
-                .filter(Optional::isPresent)
-                .map(i -> ResponseEntity.ok(ia.toModel(i.get())))
-                .orElse(ResponseEntity.notFound().build());
-    }
+    // // GET one
+    // @GetMapping(value = "/{personneId}")
+    // public ResponseEntity<?> getPersonneById(@PathVariable("personneId") String id) {
+    //     return Optional.of(ir.findById(id))
+    //             .filter(Optional::isPresent)
+    //             .map(i -> ResponseEntity.ok(ia.toModel(i.get())))
+    //             .orElse(ResponseEntity.notFound().build());
+    // }
 
         // GET one by name
-        @GetMapping(value = "/nom/{personneName}") // obligé d'ajouter /user/ sinon une erreur niveau schéma d'URL
+        @GetMapping(value = "/{personneName}") // obligé d'ajouter /user/ sinon une erreur niveau schéma d'URL
         public ResponseEntity<?> getPersonneByName(@PathVariable("personneName") String name) {
             // return Optional.of(ir.findyByNomUser(name))
             //         .filter(Optional::isPresent)

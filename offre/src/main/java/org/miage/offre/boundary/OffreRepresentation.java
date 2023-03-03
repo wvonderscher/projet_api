@@ -6,7 +6,9 @@ import java.util.UUID;
 import javax.transaction.Transactional;
 
 import org.miage.offre.control.OffreAssembler;
+import org.miage.offre.control.CandidatureAssembler;
 import org.miage.offre.Entity.Offre;
+import org.miage.offre.Entity.Candidature;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,10 +29,14 @@ public class OffreRepresentation {
 
     private final OffreResource ir;
     private final OffreAssembler ia;
+    private final CandidatureResource cr;
+    private final CandidatureAssembler ca;
     
-    public OffreRepresentation(OffreResource ir, OffreAssembler ia) {
+    public OffreRepresentation(OffreResource ir, OffreAssembler ia, CandidatureResource cr, CandidatureAssembler ca) {
         this.ir = ir;
         this.ia = ia;
+        this.cr = cr;
+        this.ca = ca;
     }
 
     // GET all
@@ -84,9 +90,32 @@ public class OffreRepresentation {
                 offre.getDescriptionStage(),
                 offre.getDateDebutStage(),
                 offre.getLieuStageAdresse());
+
         Offre saved = ir.save(toSave);
         URI location = linkTo(OffreRepresentation.class).slash(saved.getId()).toUri();
         return ResponseEntity.created(location).build();
+    }
+
+
+        // POST candidature
+        @PostMapping("/{offreId}")
+        @Transactional
+        public ResponseEntity<?> saveCandidature(@RequestBody Candidature candidature, @PathVariable("offreId") String id) {
+           Candidature toSave = new Candidature(UUID.randomUUID().toString(),
+           id,
+           candidature.getIdUser(),
+           candidature.getNomCandidat(),
+           "soumise");
+    Candidature saved = cr.save(toSave);
+    URI location = linkTo(OffreRepresentation.class).slash(saved.getId()).toUri();
+    return ResponseEntity.created(location).build();
+        }
+
+
+    // GET all Candidature
+    @GetMapping(value = "/{offreId}/users")
+    public ResponseEntity<?> getCandidature(@PathVariable("offreId") String offreId) {
+        return ResponseEntity.ok(ca.toCollectionModel(cr.findByIdOffre(offreId)));
     }
 
     // DELETE
@@ -117,6 +146,4 @@ public class OffreRepresentation {
         ir.save(toSave);
         return ResponseEntity.ok().build();
     }
-
-
 }

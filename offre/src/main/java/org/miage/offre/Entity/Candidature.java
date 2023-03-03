@@ -18,7 +18,8 @@ public class Candidature implements Serializable {
     private static final long serialVersionUID = 1146193271L;
     @Id
     private String id;
-    private String idCandidat;
+    private String idOffre;
+    private String idUser;
     private String nomCandidat;
     private String statut;
 

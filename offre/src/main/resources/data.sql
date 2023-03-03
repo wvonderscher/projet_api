@@ -1,1 +1,0 @@
-INSERT INTO Offre(id,nomStage,domaine,nomOrganisation,descriptionStage) VALUES ('1','Developpement site web','Informatique','Orange','C est un stage d info');

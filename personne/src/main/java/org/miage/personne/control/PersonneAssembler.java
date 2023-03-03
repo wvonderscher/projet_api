@@ -17,7 +17,7 @@ public class PersonneAssembler implements RepresentationModelAssembler<Personne,
     @Override
     public EntityModel<Personne> toModel(Personne personne) {
         return EntityModel.of(personne,
-                linkTo(methodOn(PersonneRepresentation.class).getPersonneById(personne.getId())).withSelfRel(),
+               // linkTo(methodOn(PersonneRepresentation.class).getPersonneById(personne.getId())).withSelfRel(),
                 linkTo(methodOn(PersonneRepresentation.class).getAllPersonnes()).withRel("collection"),
                 linkTo(methodOn(PersonneRepresentation.class).getPersonneByName(personne.getNomUser())).withSelfRel()
                 );
@@ -25,12 +25,12 @@ public class PersonneAssembler implements RepresentationModelAssembler<Personne,
 
     @Override
     public CollectionModel<EntityModel<Personne>> toCollectionModel(Iterable<? extends Personne> entities) {
-        List<EntityModel<Personne>> intervenanModel = StreamSupport
+        List<EntityModel<Personne>> personneModel = StreamSupport
             .stream(entities.spliterator(), false)
             .map(this::toModel)
             .toList();
 
-        return CollectionModel.of(intervenanModel, linkTo(methodOn(PersonneRepresentation.class)
+        return CollectionModel.of(personneModel, linkTo(methodOn(PersonneRepresentation.class)
             .getAllPersonnes()).withSelfRel());
     }
 }

@@ -1,7 +1,6 @@
 package org.miage.offre.Entity;
 import java.io.Serial;
 import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -16,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class Offre implements Serializable {
     @Serial
     private static final long serialVersionUID = 1837198248L;
+
     @Id
     private String id;
     private String nomStage;
@@ -37,7 +37,5 @@ public class Offre implements Serializable {
     // private String lieuStageTel;
     // private String lieuStageURL;
     // private boolean vacante;
-    private List<Candidature> lCandidat;
-
 
 }
