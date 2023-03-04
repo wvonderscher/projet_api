@@ -61,12 +61,19 @@ public class PersonneRepresentation {
         return ResponseEntity.ok(template.getForEntity(url, EntityModel.class, nomCandidat, offreId)).getBody();
     }
 
-        // GET one by name
-        @GetMapping(value = "/{personneName}") 
-        public ResponseEntity<?> getPersonneByName(@PathVariable("personneName") String name) {
-            //OPTIONAL donne l'erreur : method isPresent in class java.util.Optional<T> cannot be applied to given types . sauf qu'aucun type n'est donné...
-            return ResponseEntity.ok(ia.toModel(ir.findByNomUser(name)));
-        }
+    // GET one by name
+    @GetMapping(value = "/{personneName}") 
+    public ResponseEntity<?> getPersonneByName(@PathVariable("personneName") String name) {
+        //OPTIONAL donne l'erreur : method isPresent in class java.util.Optional<T> cannot be applied to given types . sauf qu'aucun type n'est donné...
+        return ResponseEntity.ok(ia.toModel(ir.findByNomUser(name)));
+     }
+
+    @DeleteMapping("/{nomCandidat}/candidatures/{offreId}")
+    public ResponseEntity<?> deleteCandidature(@PathVariable("nomCandidat") String nomCandidat, @PathVariable("offreId") String offreId){
+        String url = "http://offreService:8000/offres/{nomCandidat}/candidatures/{offreId}/delete";
+        template.delete(url, nomCandidat, offreId);
+        return ResponseEntity.noContent().build();
+    }
 
     // POST
     @PostMapping

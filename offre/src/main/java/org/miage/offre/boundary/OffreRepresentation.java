@@ -139,6 +139,18 @@ public class OffreRepresentation {
         return ResponseEntity.noContent().build();
     }
 
+
+    // DELETE candidature
+    @DeleteMapping(value = "/{nomCandidat}/candidatures/{offreId}/delete")
+    @Transactional
+    public ResponseEntity<?> deleteCandidature(@PathVariable("nomCandidat") String nomCandidat,@PathVariable("offreId") String offreId) {
+        Candidature candidature = cr.findByNomCandidatAndIdOffre(nomCandidat, offreId);
+        if(candidature != null){
+            cr.delete(candidature);
+        }
+        return ResponseEntity.noContent().build();
+    }
+
     // PUT
     @PutMapping(value = "/{offreId}")
     @Transactional
