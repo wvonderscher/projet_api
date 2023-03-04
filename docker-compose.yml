@@ -3,9 +3,9 @@ services:
   offreService:
     image: m2/offre:1.0
     ports:
-      - 8082:8082
+      - 8000:8000
     networks:
-      - isolated_nw2
+      - bridge
     volumes:
       - /tmp
     container_name: offreService
@@ -15,9 +15,9 @@ services:
   personneService:
     image: m2/personne:1.0
     ports:
-      - 8085:8085
+      - 8100:8100
     networks:
-      - isolated_nw2
+      - bridge
     volumes:
       - /tmp
     container_name: personneService
@@ -29,7 +29,7 @@ services:
     ports:
       - 5432:5432
     networks:
-      - isolated_nw2
+      - bridge
     volumes:
       - db-data:/var/lib/postgresql/data
     environment:
@@ -39,7 +39,7 @@ services:
     container_name: postgres
 
 networks:
-  isolated_nw2:
+  bridge:
     driver: bridge
 
 volumes:

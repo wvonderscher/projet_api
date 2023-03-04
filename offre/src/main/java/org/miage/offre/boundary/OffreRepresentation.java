@@ -2,9 +2,7 @@ package org.miage.offre.boundary;
 import java.net.URI;
 import java.util.Optional;
 import java.util.UUID;
-
 import javax.transaction.Transactional;
-
 import org.miage.offre.control.OffreAssembler;
 import org.miage.offre.control.CandidatureAssembler;
 import org.miage.offre.Entity.Offre;
@@ -44,6 +42,8 @@ public class OffreRepresentation {
     public ResponseEntity<?> getAllOffres() {
         return ResponseEntity.ok(ia.toCollectionModel(ir.findAll()));
     }
+
+ 
 
     // GET one
     @GetMapping(value = "/{offreId}")
@@ -117,6 +117,18 @@ public class OffreRepresentation {
     public ResponseEntity<?> getCandidature(@PathVariable("offreId") String offreId) {
         return ResponseEntity.ok(ca.toCollectionModel(cr.findByIdOffre(offreId)));
     }
+
+     // GET all candidatures for a user
+     @GetMapping("/{nomCandidat}/candidatures")
+     public ResponseEntity<?> getCandidaturesByUser(@PathVariable("nomCandidat") String nomCandidat) {
+         return ResponseEntity.ok(ca.toCollectionModel(cr.findByNomCandidat(nomCandidat)));
+     }
+
+        //GET one candidature for a user
+        @GetMapping("/{nomCandidat}/candidatures/{offreId}")
+        public ResponseEntity<?> getCandidatureByUser(@PathVariable("nomCandidat") String nomCandidat,@PathVariable("offreId") String offreId ) {
+         return ResponseEntity.ok(ca.toModel(cr.findByNomCandidatAndIdOffre(nomCandidat, offreId)));
+     }
 
     // DELETE
     @DeleteMapping(value = "/{offreId}")

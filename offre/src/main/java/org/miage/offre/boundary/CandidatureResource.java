@@ -4,10 +4,8 @@ import org.miage.offre.Entity.Candidature;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CandidatureResource extends JpaRepository<Candidature, String> {
-
-    // JPA va fournir les SELECT, INSERT, UPDATE, DELETE
-    //List<Intervenant> findByCodepostal(String codepostal);
-
     List<Candidature> findByIdOffre(String idOffre);
+    List<Candidature> findByNomCandidat(String nomCandidat);
+    Candidature findByNomCandidatAndIdOffre(String nomCandidat, String idOffre);
     
 }

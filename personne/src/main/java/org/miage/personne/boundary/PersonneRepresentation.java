@@ -5,8 +5,11 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
+
 import org.miage.personne.control.PersonneAssembler;
 import org.miage.personne.Entity.Personne;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,6 +21,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @Controller
@@ -27,10 +32,12 @@ public class PersonneRepresentation {
 
     private final PersonneResource ir;
     private final PersonneAssembler ia;
+    private final RestTemplate template;
     
-    public PersonneRepresentation(PersonneResource ir, PersonneAssembler ia) {
+    public PersonneRepresentation(PersonneResource ir, PersonneAssembler ia, RestTemplate rt) {
         this.ir = ir;
         this.ia = ia;
+        this.template = rt;
     }
 
     // GET all
@@ -39,22 +46,24 @@ public class PersonneRepresentation {
         return ResponseEntity.ok(ia.toCollectionModel(ir.findAll()));
     }
 
-    // // GET one
-    // @GetMapping(value = "/{personneId}")
-    // public ResponseEntity<?> getPersonneById(@PathVariable("personneId") String id) {
-    //     return Optional.of(ir.findById(id))
-    //             .filter(Optional::isPresent)
-    //             .map(i -> ResponseEntity.ok(ia.toModel(i.get())))
-    //             .orElse(ResponseEntity.notFound().build());
-    // }
+
+    // GET all candidature
+    @GetMapping("/{nomCandidat}/candidatures")
+    public ResponseEntity<?> getAllCandidature(@PathVariable("nomCandidat") String nomCandidat) {
+        String url ="http://offreService:8000/offres/{nomCandidat}/candidatures";
+        return ResponseEntity.ok(template.getForEntity(url, CollectionModel.class, nomCandidat)).getBody();
+    }
+
+    // GET one candidature
+    @GetMapping("/{nomCandidat}/candidatures/{offreId}")
+    public ResponseEntity<?> getOneCandidature(@PathVariable("nomCandidat") String nomCandidat, @PathVariable("offreId") String offreId){
+        String url ="http://offreService:8000/offres/{nomCandidat}/candidatures/{offreId}";
+        return ResponseEntity.ok(template.getForEntity(url, EntityModel.class, nomCandidat, offreId)).getBody();
+    }
 
         // GET one by name
-        @GetMapping(value = "/{personneName}") // obligé d'ajouter /user/ sinon une erreur niveau schéma d'URL
+        @GetMapping(value = "/{personneName}") 
         public ResponseEntity<?> getPersonneByName(@PathVariable("personneName") String name) {
-            // return Optional.of(ir.findyByNomUser(name))
-            //         .filter(Optional::isPresent)
-            //         .map(i -> ResponseEntity.ok(ia.toModel(i.get())))
-            //         .orElse(ResponseEntity.notFound().build());
             //OPTIONAL donne l'erreur : method isPresent in class java.util.Optional<T> cannot be applied to given types . sauf qu'aucun type n'est donné...
             return ResponseEntity.ok(ia.toModel(ir.findByNomUser(name)));
         }

@@ -25,5 +25,4 @@ public class Candidature implements Serializable {
 
 
 
-
 }
