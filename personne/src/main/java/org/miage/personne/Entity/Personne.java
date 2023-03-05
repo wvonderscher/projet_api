@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @AllArgsConstructor
-@NoArgsConstructor // obligatoire si JPA
+@NoArgsConstructor
 @Data
 public class Personne implements Serializable {
     @Serial
@@ -20,6 +20,11 @@ public class Personne implements Serializable {
     private String id;
     private String nomUser;
     private String telUser;
+
+    public Personne(String nomUser, String telUser) {
+        this.nomUser = nomUser;
+        this.telUser = telUser;
+    }
 
 
 }

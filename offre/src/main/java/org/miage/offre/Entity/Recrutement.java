@@ -13,16 +13,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Candidature implements Serializable {
+public class Recrutement implements Serializable {
     @Serial
-    private static final long serialVersionUID = 1146193271L;
+    private static final long serialVersionUID = 4103191379L;
     @Id
     private String id;
-    private String idOffre;
-    private String idUser;
-    private String nomCandidat;
-    private String statut;
-
-
-
+    private String idCandidature;
+    private String nombreEntretien;
+    private String decision;
 }

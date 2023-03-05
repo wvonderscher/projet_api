@@ -4,8 +4,10 @@ import java.util.Optional;
 import java.util.UUID;
 import javax.transaction.Transactional;
 import org.miage.offre.control.OffreAssembler;
+import org.miage.offre.control.RecrutementAssembler;
 import org.miage.offre.control.CandidatureAssembler;
 import org.miage.offre.Entity.Offre;
+import org.miage.offre.Entity.Recrutement;
 import org.miage.offre.Entity.Candidature;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,73 +27,89 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 @RequestMapping(value = "/offres", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OffreRepresentation {
 
-    private final OffreResource ir;
-    private final OffreAssembler ia;
+    private final OffreResource or;
+    private final OffreAssembler oa;
     private final CandidatureResource cr;
     private final CandidatureAssembler ca;
+    private final RecrutementAssembler ra;
+    private final RecrutementResource rr;
     
-    public OffreRepresentation(OffreResource ir, OffreAssembler ia, CandidatureResource cr, CandidatureAssembler ca) {
-        this.ir = ir;
-        this.ia = ia;
+    public OffreRepresentation(OffreResource or, OffreAssembler oa, CandidatureResource cr, CandidatureAssembler ca, RecrutementAssembler ra, RecrutementResource rr) {
+        this.or = or;
+        this.oa = oa;
         this.cr = cr;
         this.ca = ca;
+        this.ra = ra;
+        this.rr =rr;
     }
 
-    // GET all
+    // GET all offres
     @GetMapping
     public ResponseEntity<?> getAllOffres() {
-        return ResponseEntity.ok(ia.toCollectionModel(ir.findAll()));
+        return ResponseEntity.ok(oa.toCollectionModel(or.findAll()));
     }
 
- 
 
-    // GET one
+    // GET one offre
     @GetMapping(value = "/{offreId}")
     public ResponseEntity<?> getOffreById(@PathVariable("offreId") String id) {
-        return Optional.of(ir.findById(id))
+        return Optional.of(or.findById(id))
                 .filter(Optional::isPresent)
-                .map(i -> ResponseEntity.ok(ia.toModel(i.get())))
+                .map(i -> ResponseEntity.ok(oa.toModel(i.get())))
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // GET all by Domaine
+    // GET all offres by Domaine 
     @GetMapping(value = "/domaine/{offreDomaine}")
     public ResponseEntity<?> getOffreByDomaine(@PathVariable("offreDomaine") String domaine) {
-        return ResponseEntity.ok(ia.toCollectionModel(ir.findByDomaine(domaine)));
+        return ResponseEntity.ok(oa.toCollectionModel(or.findByDomaine(domaine)));
     }   
     
-    // GET all by organisation
+    // GET all offres by organisation
     @GetMapping(value = "/organisation/{offreOrganisation}")
     public ResponseEntity<?> getOffreByOrganisation(@PathVariable("offreOrganisation") String organisation) {
-        return ResponseEntity.ok(ia.toCollectionModel(ir.findByNomOrganisation(organisation)));
+        return ResponseEntity.ok(oa.toCollectionModel(or.findByNomOrganisation(organisation)));
     }
     
-    // GET all by DateDebutStage
+    // GET all offres by DateDebutStage
     @GetMapping(value = "/dateDebut/{offreDateDebutStage}")
     public ResponseEntity<?> getOffreByDateDebut(@PathVariable("offreDateDebutStage") String dateDebutStage) {
-        return ResponseEntity.ok(ia.toCollectionModel(ir.findByDateDebutStage(dateDebutStage)));
+        return ResponseEntity.ok(oa.toCollectionModel(or.findByDateDebutStage(dateDebutStage)));
     }
 
-     // GET all organisation
+     // GET all offres organisation
     @GetMapping(value = "/lieu/{offreLieuStageAdresse}")
     public ResponseEntity<?> getOffreByLieuStageAdresse(@PathVariable("offreLieuStageAdresse") String lieuStageAdresse) {
-         return ResponseEntity.ok(ia.toCollectionModel(ir.findByLieuStageAdresse(lieuStageAdresse)));
+         return ResponseEntity.ok(oa.toCollectionModel(or.findByLieuStageAdresse(lieuStageAdresse)));
      }
     
 
-    // POST
+    // POST offre
     @PostMapping
     @Transactional
     public ResponseEntity<?> save(@RequestBody Offre offre) {
         Offre toSave = new Offre(UUID.randomUUID().toString(),
-                offre.getNomStage(),
-                offre.getDomaine(),
-                offre.getNomOrganisation(),
-                offre.getDescriptionStage(),
-                offre.getDateDebutStage(),
-                offre.getLieuStageAdresse());
+        offre.getNomStage(),
+        offre.getDomaine(),
+        offre.getNomOrganisation(),
+        offre.getDescriptionStage(),
+        offre.getDatePublicationOffre(),
+        offre.getNiveauEtudeStage(),
+        offre.getExperienceRequiseStage(),
+        offre.getDateDebutStage(),
+        offre.getDureeStage(),
+        offre.getSalaireStage(),
+        offre.getIndemnisation(),
+        offre.getOrganisationAdresse(),
+        offre.getOrganisationMail(),
+        offre.getOrganisationTel(),
+        offre.getOrganisationURL(),
+        offre.getLieuStageAdresse(),
+        offre.getLieuStageTel(),
+        offre.getLieuStageURL(),
+        true);
 
-        Offre saved = ir.save(toSave);
+        Offre saved = or.save(toSave);
         URI location = linkTo(OffreRepresentation.class).slash(saved.getId()).toUri();
         return ResponseEntity.created(location).build();
     }
@@ -101,6 +119,9 @@ public class OffreRepresentation {
         @PostMapping("/{offreId}")
         @Transactional
         public ResponseEntity<?> saveCandidature(@RequestBody Candidature candidature, @PathVariable("offreId") String id) {
+            if (!or.existsById(id)) {
+                return ResponseEntity.notFound().build();
+            }
            Candidature toSave = new Candidature(UUID.randomUUID().toString(),
            id,
            candidature.getIdUser(),
@@ -112,7 +133,7 @@ public class OffreRepresentation {
         }
 
 
-    // GET all Candidature
+    // GET all Candidatures
     @GetMapping(value = "/{offreId}/users")
     public ResponseEntity<?> getCandidature(@PathVariable("offreId") String offreId) {
         return ResponseEntity.ok(ca.toCollectionModel(cr.findByIdOffre(offreId)));
@@ -130,12 +151,12 @@ public class OffreRepresentation {
          return ResponseEntity.ok(ca.toModel(cr.findByNomCandidatAndIdOffre(nomCandidat, offreId)));
      }
 
-    // DELETE
+    // DELETE offre
     @DeleteMapping(value = "/{offreId}")
     @Transactional
     public ResponseEntity<?> delete(@PathVariable("offreId") String id) {
-        Optional<Offre> offre = ir.findById(id);
-        offre.ifPresent(ir::delete);
+        Optional<Offre> offre = or.findById(id);
+        offre.ifPresent(or::delete);
         return ResponseEntity.noContent().build();
     }
 
@@ -151,23 +172,80 @@ public class OffreRepresentation {
         return ResponseEntity.noContent().build();
     }
 
-    // PUT
+    // PUT offre
     @PutMapping(value = "/{offreId}")
     @Transactional
     public ResponseEntity<?> update(@PathVariable("offreId") String id,
             @RequestBody Offre newOffre) {
-        if (!ir.existsById(id)) {
+        if (!or.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        Offre toSave = new Offre(UUID.randomUUID().toString(),
+        Offre toSave = new Offre(
                 newOffre.getNomStage(),
                 newOffre.getDomaine(),
                 newOffre.getNomOrganisation(),
                 newOffre.getDescriptionStage(),
+                newOffre.getDatePublicationOffre(),
+                newOffre.getNiveauEtudeStage(),
+                newOffre.getExperienceRequiseStage(),
                 newOffre.getDateDebutStage(),
-                newOffre.getLieuStageAdresse());
+                newOffre.getDureeStage(),
+                newOffre.getSalaireStage(),
+                newOffre.getIndemnisation(),
+                newOffre.getOrganisationAdresse(),
+                newOffre.getOrganisationMail(),
+                newOffre.getOrganisationTel(),
+                newOffre.getOrganisationURL(),
+                newOffre.getLieuStageAdresse(),
+                newOffre.getLieuStageTel(),
+                newOffre.getLieuStageURL(),
+                true);
         toSave.setId(id);
-        ir.save(toSave);
+        or.save(toSave);
         return ResponseEntity.ok().build();
     }
+
+        // GET all recrutement
+        @GetMapping("/recrutements")
+        public ResponseEntity<?> getAllRecrutements() {
+            return ResponseEntity.ok(ra.toCollectionModel(rr.findAll()));
+        }
+
+
+            // GET one recrutement
+    @GetMapping(value = "/recrutements/{recrutementId}")
+    public ResponseEntity<?> getRecrutementById(@PathVariable("recrutementId") String recrutementId) {
+        return Optional.of(rr.findById(recrutementId))
+                .filter(Optional::isPresent)
+                .map(i -> ResponseEntity.ok(ra.toModel(i.get())))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+
+            // POST Recrutement
+            @PostMapping("/candidatures/{candidatureId}")
+            @Transactional
+            public ResponseEntity<?> saveRecrutement(@RequestBody Recrutement recrutement, @PathVariable("candidatureId") String id) {
+                if (!cr.existsById(id)) {
+                    return ResponseEntity.notFound().build();
+                }
+                Recrutement toSave = new Recrutement(UUID.randomUUID().toString(),
+               id,
+               recrutement.getNombreEntretien(),
+               "aucune");
+        Recrutement saved = rr.save(toSave);
+        URI location = linkTo(OffreRepresentation.class).slash(saved.getId()).toUri();
+        return ResponseEntity.created(location).build();
+            }
+
+    // DELETE candidature
+    @DeleteMapping(value = "/recrutements/{recrutementId}")
+    @Transactional
+    public ResponseEntity<?> deleteRecrutement(@PathVariable("recrutementId") String id) {
+        Optional<Recrutement> recrutement = rr.findById(id);
+        recrutement.ifPresent(rr::delete);
+        return ResponseEntity.noContent().build();
+    }
+
+    
 }

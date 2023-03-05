@@ -30,20 +30,20 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 @RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PersonneRepresentation {
 
-    private final PersonneResource ir;
-    private final PersonneAssembler ia;
+    private final PersonneResource pr;
+    private final PersonneAssembler pa;
     private final RestTemplate template;
     
-    public PersonneRepresentation(PersonneResource ir, PersonneAssembler ia, RestTemplate rt) {
-        this.ir = ir;
-        this.ia = ia;
+    public PersonneRepresentation(PersonneResource pr, PersonneAssembler pa, RestTemplate rt) {
+        this.pr = pr;
+        this.pa = pa;
         this.template = rt;
     }
 
     // GET all
     @GetMapping
     public ResponseEntity<?> getAllPersonnes() {
-        return ResponseEntity.ok(ia.toCollectionModel(ir.findAll()));
+        return ResponseEntity.ok(pa.toCollectionModel(pr.findAll()));
     }
 
 
@@ -65,7 +65,7 @@ public class PersonneRepresentation {
     @GetMapping(value = "/{personneName}") 
     public ResponseEntity<?> getPersonneByName(@PathVariable("personneName") String name) {
         //OPTIONAL donne l'erreur : method isPresent in class java.util.Optional<T> cannot be applied to given types . sauf qu'aucun type n'est donné...
-        return ResponseEntity.ok(ia.toModel(ir.findByNomUser(name)));
+        return ResponseEntity.ok(pa.toModel(pr.findByNomUser(name)));
      }
 
     @DeleteMapping("/{nomCandidat}/candidatures/{offreId}")
@@ -82,7 +82,7 @@ public class PersonneRepresentation {
         Personne toSave = new Personne(UUID.randomUUID().toString(),
                 personne.getNomUser(),
                 personne.getTelUser());
-        Personne saved = ir.save(toSave);
+        Personne saved = pr.save(toSave);
         URI location = linkTo(PersonneRepresentation.class).slash(saved.getId()).toUri();
         return ResponseEntity.created(location).build();
     }
@@ -91,8 +91,8 @@ public class PersonneRepresentation {
     @DeleteMapping(value = "/{personneId}")
     @Transactional
     public ResponseEntity<?> delete(@PathVariable("personneId") String id) {
-        Optional<Personne> personne = ir.findById(id);
-        personne.ifPresent(ir::delete);
+        Optional<Personne> personne = pr.findById(id);
+        personne.ifPresent(pr::delete);
         return ResponseEntity.noContent().build();
     }
 
@@ -101,14 +101,14 @@ public class PersonneRepresentation {
     @Transactional
     public ResponseEntity<?> update(@PathVariable("personneId") String id,
             @RequestBody Personne newPersonne) {
-        if (!ir.existsById(id)) {
+        if (!pr.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        Personne toSave = new Personne(UUID.randomUUID().toString(),
+        Personne toSave = new Personne(
                 newPersonne.getNomUser(),
                 newPersonne.getTelUser());
         toSave.setId(id);
-        ir.save(toSave);
+        pr.save(toSave);
         return ResponseEntity.ok().build();
     }
 
