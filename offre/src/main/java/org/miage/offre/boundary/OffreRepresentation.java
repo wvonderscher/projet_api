@@ -260,6 +260,9 @@ public class OffreRepresentation {
                 if (!cr.existsById(id)) {
                     return ResponseEntity.notFound().build();
                 }
+                if(rr.findByIdCandidature(id)!=null){
+                    return ResponseEntity.badRequest().build();
+                }
                 Recrutement toSave = new Recrutement(UUID.randomUUID().toString(),
                id,
                recrutement.getNombreEntretien(),
