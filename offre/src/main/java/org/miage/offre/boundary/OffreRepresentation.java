@@ -41,7 +41,7 @@ public class OffreRepresentation {
         this.cr = cr;
         this.ca = ca;
         this.ra = ra;
-        this.rr =rr;
+        this.rr = rr;
     }
 
     // GET all offres
@@ -123,11 +123,16 @@ public class OffreRepresentation {
             if (!or.existsById(id)) {
                 return ResponseEntity.notFound().build();
             }
+            Offre offre = or.findById(id).get();
+            // On vérifie si l'offre est vacante et que le candidat n'a pas deja candidate sur l'offre
+            if((!offre.isVacante()) || (cr.findByNomCandidatAndIdOffre(candidature.getNomCandidat(), id)!=null)){
+                return ResponseEntity.badRequest().build();
+            }
            Candidature toSave = new Candidature(UUID.randomUUID().toString(),
            id,
            candidature.getIdUser(),
-           candidature.getNomCandidat(),
-           "soumise");
+           candidature.getNomCandidat()
+           );
     Candidature saved = cr.save(toSave);
     URI location = linkTo(OffreRepresentation.class).slash(saved.getId()).toUri();
     return ResponseEntity.created(location).build();

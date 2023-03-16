@@ -21,8 +21,4 @@ public class Candidature implements Serializable {
     private String idOffre;
     private String idUser;
     private String nomCandidat;
-    private String statut;
-
-
-
 }
