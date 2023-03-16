@@ -1,5 +1,4 @@
 package org.miage.offre.boundary;
-import java.util.List;
 import org.miage.offre.Entity.Recrutement;
 import org.springframework.data.jpa.repository.JpaRepository;
 
