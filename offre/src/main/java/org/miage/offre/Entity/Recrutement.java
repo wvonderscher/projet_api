@@ -21,4 +21,10 @@ public class Recrutement implements Serializable {
     private String idCandidature;
     private String nombreEntretien;
     private String decision;
+
+
+
+    public Recrutement(String decision){
+        this.decision = decision;
+    }
 }

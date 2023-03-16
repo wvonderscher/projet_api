@@ -15,19 +15,19 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 public class RecrutementAssembler implements RepresentationModelAssembler<Recrutement, EntityModel<Recrutement>> {
 
     @Override
-    public EntityModel<Recrutement> toModel(Recrutement candidature) {
-        return EntityModel.of(candidature,
-                linkTo(methodOn(OffreRepresentation.class).getOffreById(candidature.getId())).withSelfRel(),
-                linkTo(methodOn(OffreRepresentation.class).getAllOffres()).withRel("collection"));
+    public EntityModel<Recrutement> toModel(Recrutement recrutement) {
+        return EntityModel.of(recrutement,
+                linkTo(methodOn(OffreRepresentation.class).getOffreById(recrutement.getId())).withSelfRel(),
+                linkTo(methodOn(OffreRepresentation.class).getAllRecrutements()).withRel("collection"));
     }
 
     @Override
     public CollectionModel<EntityModel<Recrutement>> toCollectionModel(Iterable<? extends Recrutement> entities) {
-        List<EntityModel<Recrutement>> candidatureModel = StreamSupport
+        List<EntityModel<Recrutement>> recrutementModel = StreamSupport
             .stream(entities.spliterator(), false)
             .map(this::toModel)
             .toList();
-        return CollectionModel.of(candidatureModel, linkTo(methodOn(OffreRepresentation.class)
-            .getAllOffres()).withSelfRel());
+        return CollectionModel.of(recrutementModel, linkTo(methodOn(OffreRepresentation.class)
+            .getAllRecrutements()).withSelfRel());
     }
 }

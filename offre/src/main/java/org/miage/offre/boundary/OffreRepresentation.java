@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -171,6 +172,32 @@ public class OffreRepresentation {
         }
         return ResponseEntity.noContent().build();
     }
+
+
+        // PATCH recrutement acceptation
+        @PatchMapping(value = "/recrutement/{recrutementId}/accepter")
+        @Transactional
+        public ResponseEntity<?> updateRecrutementAccepter(@PathVariable("recrutementId") String id) {
+            if (!rr.existsById(id)) {
+                return ResponseEntity.notFound().build();
+            }
+            Recrutement recru = rr.findById(id).get();
+            recru.setDecision("accepté");
+            return ResponseEntity.ok().build();
+        }
+
+
+                // PATCH offre fermer candidature
+                @PatchMapping(value = "/offre/{offreId}/fermer")
+                @Transactional
+                public ResponseEntity<?> updateOffreFermer(@PathVariable("offreId") String id) {
+                    if (!or.existsById(id)) {
+                        return ResponseEntity.notFound().build();
+                    }
+                    Offre offre = or.findById(id).get();
+                    offre.setVacante(false);
+                    return ResponseEntity.ok().build();
+                }
 
     // PUT offre
     @PutMapping(value = "/{offreId}")
