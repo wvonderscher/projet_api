@@ -253,7 +253,6 @@ public class OffreRepresentation {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-
             // POST Recrutement
             @PostMapping("/candidatures/{candidatureId}")
             @Transactional

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @AllArgsConstructor
-@NoArgsConstructor // obligatoire si JPA
+@NoArgsConstructor
 @Data
 public class Offre implements Serializable {
     @Serial

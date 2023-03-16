@@ -4,5 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RecrutementResource extends JpaRepository<Recrutement, String> {
 
+    Recrutement findByIdCandidature(String idCandidature);
     
 }
