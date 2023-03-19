@@ -75,10 +75,14 @@ public class OffreRepresentation {
     // GET all offres by DateDebutStage
     @GetMapping(value = "/dateDebut/{offreDateDebutStage}")
     public ResponseEntity<?> getOffreByDateDebut(@PathVariable("offreDateDebutStage") String dateDebutStage) {
+        //verification du format, on ne prend pas les "/"", on rempalce par des "-"
+        if(dateDebutStage.contains("/")){
+            dateDebutStage.replace("/", "-");
+        }
         return ResponseEntity.ok(oa.toCollectionModel(or.findByDateDebutStage(dateDebutStage)));
     }
 
-     // GET all offres organisation
+     // GET all offres by Lieu de stage
     @GetMapping(value = "/lieu/{offreLieuStageAdresse}")
     public ResponseEntity<?> getOffreByLieuStageAdresse(@PathVariable("offreLieuStageAdresse") String lieuStageAdresse) {
          return ResponseEntity.ok(oa.toCollectionModel(or.findByLieuStageAdresse(lieuStageAdresse)));
@@ -116,23 +120,23 @@ public class OffreRepresentation {
     }
 
 
-        // POST candidature
-        @PostMapping("/{offreId}")
-        @Transactional
-        public ResponseEntity<?> saveCandidature(@RequestBody Candidature candidature, @PathVariable("offreId") String id) {
-            if (!or.existsById(id)) {
-                return ResponseEntity.notFound().build();
-            }
-            Offre offre = or.findById(id).get();
-            // On vérifie si l'offre est vacante et que le candidat n'a pas deja candidate sur l'offre
-            if((!offre.isVacante()) || (cr.findByNomCandidatAndIdOffre(candidature.getNomCandidat(), id)!=null)){
-                return ResponseEntity.badRequest().build();
-            }
-           Candidature toSave = new Candidature(UUID.randomUUID().toString(),
-           id,
-           candidature.getIdUser(),
-           candidature.getNomCandidat()
-           );
+    // POST candidature
+    @PostMapping("/{offreId}")
+    @Transactional
+    public ResponseEntity<?> saveCandidature(@RequestBody Candidature candidature, @PathVariable("offreId") String id) {
+        if (!or.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        Offre offre = or.findById(id).get();
+        // On vérifie si l'offre est vacante et que le candidat n'a pas deja candidate sur l'offre
+        if((!offre.isVacante()) || (cr.findByNomCandidatAndIdOffre(candidature.getNomCandidat(), id)!=null)){
+            return ResponseEntity.badRequest().build();
+        }
+        Candidature toSave = new Candidature(UUID.randomUUID().toString(),
+        id,
+        candidature.getIdUser(),
+        candidature.getNomCandidat()
+        );
     Candidature saved = cr.save(toSave);
     URI location = linkTo(OffreRepresentation.class).slash(saved.getId()).toUri();
     return ResponseEntity.created(location).build();
@@ -151,11 +155,11 @@ public class OffreRepresentation {
          return ResponseEntity.ok(ca.toCollectionModel(cr.findByNomCandidat(nomCandidat)));
      }
 
-        //GET one candidature for a user
-        @GetMapping("/{nomCandidat}/candidatures/{offreId}")
-        public ResponseEntity<?> getCandidatureByUser(@PathVariable("nomCandidat") String nomCandidat,@PathVariable("offreId") String offreId ) {
-         return ResponseEntity.ok(ca.toModel(cr.findByNomCandidatAndIdOffre(nomCandidat, offreId)));
-     }
+    //GET one candidature for a user
+    @GetMapping("/{nomCandidat}/candidatures/{offreId}")
+    public ResponseEntity<?> getCandidatureByUser(@PathVariable("nomCandidat") String nomCandidat,@PathVariable("offreId") String offreId ) {
+        return ResponseEntity.ok(ca.toModel(cr.findByNomCandidatAndIdOffre(nomCandidat, offreId)));
+    }
 
     // DELETE offre
     @DeleteMapping(value = "/{offreId}")
@@ -179,30 +183,30 @@ public class OffreRepresentation {
     }
 
 
-        // PATCH recrutement acceptation
-        @PatchMapping(value = "/recrutement/{recrutementId}/accepter")
-        @Transactional
-        public ResponseEntity<?> updateRecrutementAccepter(@PathVariable("recrutementId") String id) {
-            if (!rr.existsById(id)) {
-                return ResponseEntity.notFound().build();
-            }
-            Recrutement recru = rr.findById(id).get();
-            recru.setDecision("accepté");
-            return ResponseEntity.ok().build();
+    // PATCH recrutement acceptation
+    @PatchMapping(value = "/recrutement/{recrutementId}/accepter")
+    @Transactional
+    public ResponseEntity<?> updateRecrutementAccepter(@PathVariable("recrutementId") String id) {
+        if (!rr.existsById(id)) {
+            return ResponseEntity.notFound().build();
         }
+        Recrutement recru = rr.findById(id).get();
+        recru.setDecision("accepté");
+        return ResponseEntity.ok().build();
+    }
 
 
-                // PATCH offre fermer candidature
-                @PatchMapping(value = "/offre/{offreId}/fermer")
-                @Transactional
-                public ResponseEntity<?> updateOffreFermer(@PathVariable("offreId") String id) {
-                    if (!or.existsById(id)) {
-                        return ResponseEntity.notFound().build();
-                    }
-                    Offre offre = or.findById(id).get();
-                    offre.setVacante(false);
-                    return ResponseEntity.ok().build();
-                }
+    // PATCH offre fermer candidature
+    @PatchMapping(value = "/offre/{offreId}/fermer")
+    @Transactional
+    public ResponseEntity<?> updateOffreFermer(@PathVariable("offreId") String id) {
+        if (!or.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        Offre offre = or.findById(id).get();
+        offre.setVacante(false);
+        return ResponseEntity.ok().build();
+    }
 
     // PUT offre
     @PutMapping(value = "/{offreId}")
@@ -237,11 +241,11 @@ public class OffreRepresentation {
         return ResponseEntity.ok().build();
     }
 
-        // GET all recrutement
-        @GetMapping("/recrutements")
-        public ResponseEntity<?> getAllRecrutements() {
-            return ResponseEntity.ok(ra.toCollectionModel(rr.findAll()));
-        }
+    // GET all recrutement
+    @GetMapping("/recrutements")
+    public ResponseEntity<?> getAllRecrutements() {
+        return ResponseEntity.ok(ra.toCollectionModel(rr.findAll()));
+    }
 
 
             // GET one recrutement
@@ -253,24 +257,21 @@ public class OffreRepresentation {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-            // POST Recrutement
-            @PostMapping("/candidatures/{candidatureId}")
-            @Transactional
-            public ResponseEntity<?> saveRecrutement(@RequestBody Recrutement recrutement, @PathVariable("candidatureId") String id) {
-                if (!cr.existsById(id)) {
-                    return ResponseEntity.notFound().build();
-                }
-                if(rr.findByIdCandidature(id)!=null){
-                    return ResponseEntity.badRequest().build();
-                }
-                Recrutement toSave = new Recrutement(UUID.randomUUID().toString(),
-               id,
-               recrutement.getNombreEntretien(),
-               "aucune");
+    // POST Recrutement
+    @PostMapping("/candidatures/{candidatureId}")
+    @Transactional
+    public ResponseEntity<?> saveRecrutement(@RequestBody Recrutement recrutement, @PathVariable("candidatureId") String id) {
+        if (!cr.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        if(rr.findByIdCandidature(id)!=null){
+            return ResponseEntity.badRequest().build();
+        }
+        Recrutement toSave = new Recrutement(UUID.randomUUID().toString(),id,recrutement.getNombreEntretien(),"aucune");
         Recrutement saved = rr.save(toSave);
         URI location = linkTo(OffreRepresentation.class).slash(saved.getId()).toUri();
         return ResponseEntity.created(location).build();
-            }
+    }
 
     // DELETE candidature
     @DeleteMapping(value = "/recrutements/{recrutementId}")
