@@ -40,7 +40,7 @@ public class PersonneRepresentation {
         this.template = rt;
     }
 
-    // GET all
+    // GET all (testé)
     @GetMapping
     public ResponseEntity<?> getAllPersonnes() {
         return ResponseEntity.ok(pa.toCollectionModel(pr.findAll()));
@@ -61,10 +61,10 @@ public class PersonneRepresentation {
         return ResponseEntity.ok(template.getForEntity(url, EntityModel.class, nomCandidat, offreId)).getBody();
     }
 
-    // GET one by name
-    @GetMapping(value = "/{personneName}") 
+    // GET one by name (testé)
+    @GetMapping(value = "/{personneName}")
     public ResponseEntity<?> getPersonneByName(@PathVariable("personneName") String name) {
-        //OPTIONAL donne l'erreur : method isPresent in class java.util.Optional<T> cannot be applied to given types . sauf qu'aucun type n'est donné...
+        //OPTIONAL donne l'erreur : method isPresent in class java.util.Optional<T> cannot be applied to given types.
         return ResponseEntity.ok(pa.toModel(pr.findByNomUser(name)));
      }
 
@@ -75,7 +75,7 @@ public class PersonneRepresentation {
         return ResponseEntity.noContent().build();
     }
 
-    // POST
+    // POST ajout d'une personne (testé)
     @PostMapping
     @Transactional
     public ResponseEntity<?> save(@RequestBody Personne personne) {
@@ -87,7 +87,7 @@ public class PersonneRepresentation {
         return ResponseEntity.created(location).build();
     }
 
-    // DELETE
+    // DELETE suppression d'une personne (testé)
     @DeleteMapping(value = "/{personneId}")
     @Transactional
     public ResponseEntity<?> delete(@PathVariable("personneId") String id) {
@@ -96,7 +96,7 @@ public class PersonneRepresentation {
         return ResponseEntity.noContent().build();
     }
 
-    // PUT
+    // PUT modification
     @PutMapping(value = "/{personneId}")
     @Transactional
     public ResponseEntity<?> update(@PathVariable("personneId") String id,

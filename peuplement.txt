@@ -1,0 +1,7 @@
+DELETE FROM candidature;
+DELETE FROM offre;
+DELETE FROM personne;
+DELETE FROM recrutement;
+
+
+INSERT INTO 
