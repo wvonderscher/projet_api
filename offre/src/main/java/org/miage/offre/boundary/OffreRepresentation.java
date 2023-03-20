@@ -44,14 +44,14 @@ public class OffreRepresentation {
         this.rr = rr;
     }
 
-    // GET all offres
+    // GET all offres (testé)
     @GetMapping
     public ResponseEntity<?> getAllOffres() {
         return ResponseEntity.ok(oa.toCollectionModel(or.findAll()));
     }
 
 
-    // GET one offre
+    // GET one offre (testé)
     @GetMapping(value = "/{offreId}")
     public ResponseEntity<?> getOffreById(@PathVariable("offreId") String id) {
         return Optional.of(or.findById(id))
@@ -60,19 +60,19 @@ public class OffreRepresentation {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // GET all offres by Domaine 
+    // GET all offres by Domaine (testé) 
     @GetMapping(value = "/domaine/{offreDomaine}")
     public ResponseEntity<?> getOffreByDomaine(@PathVariable("offreDomaine") String domaine) {
         return ResponseEntity.ok(oa.toCollectionModel(or.findByDomaine(domaine)));
     }   
     
-    // GET all offres by organisation
+    // GET all offres by organisation (testé)
     @GetMapping(value = "/organisation/{offreOrganisation}")
     public ResponseEntity<?> getOffreByOrganisation(@PathVariable("offreOrganisation") String organisation) {
         return ResponseEntity.ok(oa.toCollectionModel(or.findByNomOrganisation(organisation)));
     }
     
-    // GET all offres by DateDebutStage
+    // GET all offres by DateDebutStage (testé)
     @GetMapping(value = "/dateDebut/{offreDateDebutStage}")
     public ResponseEntity<?> getOffreByDateDebut(@PathVariable("offreDateDebutStage") String dateDebutStage) {
         //verification du format, on ne prend pas les "/"", on rempalce par des "-"
@@ -82,14 +82,14 @@ public class OffreRepresentation {
         return ResponseEntity.ok(oa.toCollectionModel(or.findByDateDebutStage(dateDebutStage)));
     }
 
-     // GET all offres by Lieu de stage
+     // GET all offres by Lieu de stage (testé)
     @GetMapping(value = "/lieu/{offreLieuStageAdresse}")
     public ResponseEntity<?> getOffreByLieuStageAdresse(@PathVariable("offreLieuStageAdresse") String lieuStageAdresse) {
          return ResponseEntity.ok(oa.toCollectionModel(or.findByLieuStageAdresse(lieuStageAdresse)));
      }
     
 
-    // POST offre
+    // POST offre (testé)
     @PostMapping
     @Transactional
     public ResponseEntity<?> save(@RequestBody Offre offre) {
@@ -120,7 +120,7 @@ public class OffreRepresentation {
     }
 
 
-    // POST candidature
+    // POST candidature (testé)
     @PostMapping("/{offreId}")
     @Transactional
     public ResponseEntity<?> saveCandidature(@RequestBody Candidature candidature, @PathVariable("offreId") String id) {
@@ -143,25 +143,25 @@ public class OffreRepresentation {
         }
 
 
-    // GET all Candidatures
+    // GET all Candidatures (testé)
     @GetMapping(value = "/{offreId}/users")
     public ResponseEntity<?> getCandidature(@PathVariable("offreId") String offreId) {
         return ResponseEntity.ok(ca.toCollectionModel(cr.findByIdOffre(offreId)));
     }
 
-     // GET all candidatures for a user
+     // GET all candidatures for a user (testé)
      @GetMapping("/{nomCandidat}/candidatures")
      public ResponseEntity<?> getCandidaturesByUser(@PathVariable("nomCandidat") String nomCandidat) {
          return ResponseEntity.ok(ca.toCollectionModel(cr.findByNomCandidat(nomCandidat)));
      }
 
-    //GET one candidature for a user
+    //GET one candidature for a user (testé)
     @GetMapping("/{nomCandidat}/candidatures/{offreId}")
     public ResponseEntity<?> getCandidatureByUser(@PathVariable("nomCandidat") String nomCandidat,@PathVariable("offreId") String offreId ) {
         return ResponseEntity.ok(ca.toModel(cr.findByNomCandidatAndIdOffre(nomCandidat, offreId)));
     }
 
-    // DELETE offre
+    // DELETE offre (testé)
     @DeleteMapping(value = "/{offreId}")
     @Transactional
     public ResponseEntity<?> delete(@PathVariable("offreId") String id) {
@@ -171,7 +171,7 @@ public class OffreRepresentation {
     }
 
 
-    // DELETE candidature
+    // DELETE candidature (testé)
     @DeleteMapping(value = "/{nomCandidat}/candidatures/{offreId}/delete")
     @Transactional
     public ResponseEntity<?> deleteCandidature(@PathVariable("nomCandidat") String nomCandidat,@PathVariable("offreId") String offreId) {
@@ -183,8 +183,8 @@ public class OffreRepresentation {
     }
 
 
-    // PATCH recrutement acceptation
-    @PatchMapping(value = "/recrutement/{recrutementId}/accepter")
+    // PATCH recrutement acceptation (testé)
+    @PatchMapping(value = "/recrutements/{recrutementId}/accepter")
     @Transactional
     public ResponseEntity<?> updateRecrutementAccepter(@PathVariable("recrutementId") String id) {
         if (!rr.existsById(id)) {
@@ -196,7 +196,7 @@ public class OffreRepresentation {
     }
 
 
-    // PATCH offre fermer candidature
+    // PATCH offre fermer candidature (testé)
     @PatchMapping(value = "/offre/{offreId}/fermer")
     @Transactional
     public ResponseEntity<?> updateOffreFermer(@PathVariable("offreId") String id) {
@@ -208,7 +208,7 @@ public class OffreRepresentation {
         return ResponseEntity.ok().build();
     }
 
-    // PUT offre
+    // PUT offre (testé)
     @PutMapping(value = "/{offreId}")
     @Transactional
     public ResponseEntity<?> update(@PathVariable("offreId") String id,
@@ -241,14 +241,14 @@ public class OffreRepresentation {
         return ResponseEntity.ok().build();
     }
 
-    // GET all recrutement
+    // GET all recrutement (testé)
     @GetMapping("/recrutements")
     public ResponseEntity<?> getAllRecrutements() {
         return ResponseEntity.ok(ra.toCollectionModel(rr.findAll()));
     }
 
 
-            // GET one recrutement
+            // GET one recrutement (testé)
     @GetMapping(value = "/recrutements/{recrutementId}")
     public ResponseEntity<?> getRecrutementById(@PathVariable("recrutementId") String recrutementId) {
         return Optional.of(rr.findById(recrutementId))
@@ -257,7 +257,7 @@ public class OffreRepresentation {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST Recrutement
+    // POST Recrutement (testé)
     @PostMapping("/candidatures/{candidatureId}")
     @Transactional
     public ResponseEntity<?> saveRecrutement(@RequestBody Recrutement recrutement, @PathVariable("candidatureId") String id) {
@@ -273,7 +273,7 @@ public class OffreRepresentation {
         return ResponseEntity.created(location).build();
     }
 
-    // DELETE candidature
+    // DELETE Recrutement (testé)
     @DeleteMapping(value = "/recrutements/{recrutementId}")
     @Transactional
     public ResponseEntity<?> deleteRecrutement(@PathVariable("recrutementId") String id) {
