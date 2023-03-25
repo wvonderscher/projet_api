@@ -68,6 +68,7 @@ public class PersonneRepresentation {
         return ResponseEntity.ok(pa.toModel(pr.findByNomUser(name)));
      }
 
+     // DELETE d'une candidature d'une personne
     @DeleteMapping("/{nomCandidat}/candidatures/{offreId}")
     public ResponseEntity<?> deleteCandidature(@PathVariable("nomCandidat") String nomCandidat, @PathVariable("offreId") String offreId){
         String url = "http://offreService:8000/offres/{nomCandidat}/candidatures/{offreId}/delete";

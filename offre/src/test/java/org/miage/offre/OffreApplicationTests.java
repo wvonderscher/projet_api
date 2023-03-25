@@ -49,6 +49,8 @@ class OffreApplicationTests {
         cr.deleteAll();
         or.deleteAll();
         RestAssured.port =port;
+
+    
     }
 
     // Test requête vers API

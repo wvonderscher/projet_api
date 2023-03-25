@@ -4,4 +4,7 @@ DELETE FROM personne;
 DELETE FROM recrutement;
 
 
-INSERT INTO 
+INSERT INTO personne (id, nom_user, tel_user) VALUES ('1', 'Michel', '0637592754');
+INSERT INTO personne (id, nom_user, tel_user) VALUES ('2', 'Toto', '0637592754');
+INSERT INTO personne (id, nom_user, tel_user) VALUES ('3', 'Denis', '0637592754');
+
