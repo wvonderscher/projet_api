@@ -17,7 +17,7 @@ public class RecrutementAssembler implements RepresentationModelAssembler<Recrut
     @Override
     public EntityModel<Recrutement> toModel(Recrutement recrutement) {
         return EntityModel.of(recrutement,
-                linkTo(methodOn(OffreRepresentation.class).getOffreById(recrutement.getId())).withSelfRel(),
+                linkTo(methodOn(OffreRepresentation.class).getRecrutementById(recrutement.getId())).withSelfRel(),
                 linkTo(methodOn(OffreRepresentation.class).getAllRecrutements()).withRel("collection"));
     }
 
