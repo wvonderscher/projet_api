@@ -18,6 +18,7 @@ public class CandidatureAssembler implements RepresentationModelAssembler<Candid
     public EntityModel<Candidature> toModel(Candidature candidature) {
         return EntityModel.of(candidature,
                 linkTo(methodOn(OffreRepresentation.class).getOffreById(candidature.getId())).withSelfRel(),
+                linkTo(methodOn(OffreRepresentation.class).getCandidaturesByUser(candidature.getNomCandidat())).withRel("collection"),
                 linkTo(methodOn(OffreRepresentation.class).getAllOffres()).withRel("collection"));
     }
 
