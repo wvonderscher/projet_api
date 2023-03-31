@@ -13,6 +13,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+/**
+ * Classe qui modélise un processus de recurtement sur une candidature d'une personne.
+ */
 public class Recrutement implements Serializable {
     @Serial
     private static final long serialVersionUID = 4103191379L;

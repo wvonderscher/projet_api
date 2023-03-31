@@ -2,10 +2,7 @@ package org.miage.personne.boundary;
 import java.net.URI;
 import java.util.Optional;
 import java.util.UUID;
-
 import javax.transaction.Transactional;
-
-
 import org.miage.personne.control.PersonneAssembler;
 import org.miage.personne.Entity.Personne;
 import org.springframework.hateoas.CollectionModel;

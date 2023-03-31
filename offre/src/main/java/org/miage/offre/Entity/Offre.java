@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+/**
+ * Classe qui modélise une offre de stage
+ */
 public class Offre implements Serializable {
     @Serial
     private static final long serialVersionUID = 1837198248L;
